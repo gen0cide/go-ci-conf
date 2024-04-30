@@ -1,0 +1,166 @@
+run:
+  timeout: 30s
+  tests: false
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+    ignore: "fmt:.*,io/ioutil:^Read.*,pp:.*,io:^Read.*,io:^Copy"
+  exhaustruct:
+    exclude:
+      - '.+/cobra\.Command$'
+      - 'syscall\..*$'
+      - 'net\..*$'
+      - 'golang.org/x/crypto/ssh\..*$'
+  goconst:
+    min-len: 3
+    min-occurrences: 4
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+      - experimental
+      - opinionated
+    disabled-checks:
+      - wrapperFunc
+      - regexpMust
+    settings:
+      captLocal:
+        paramsOnly: true
+      rangeValCopy:
+        sizeThreshold: 32
+  gocyclo:
+    min-complexity: 20
+  gosimple:
+    go: "1.17"
+    checks: ["all"]
+  govet:
+    enable-all: true
+  nakedret:
+    max-func-lines: 50
+  prealloc:
+    simple: true
+    range-loops: true
+    for-loops: true
+  predeclared:
+    q: true
+  revive:
+    max-open-files: 4096
+    enable-all-rules: true
+    rules:
+      - name: line-length-limit
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments: [140]
+      - name: add-constant
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments:
+          - maxLitCount: "3"
+            allowStrs: '""'
+            allowInts: "0,1,2"
+            allowFloats: "0.0,0.,1.0,1.,2.0,2."
+      - name: unhandled-error
+        severity: warning
+        disabled: true
+      - name: cognitive-complexity
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments: [7]
+  staticcheck:
+    go: "1.17"
+    checks: ["all"]
+  whitespace:
+    multi-if: true
+    multi-func: true
+issues:
+  fix: true
+  exclude-use-default: false
+  exclude:
+    # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
+    - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|pp.*|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+    # golint: False positive when tests are defined in package 'test'
+    - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
+    # staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
+    - ineffective break statement. Did you mean to break out of the outer loop
+    # gosec: Too many false-positives for parametrized shell calls
+    - Subprocess launch(ed with variable|ing should be audited)
+    # gosec: Duplicated errcheck checks
+    - G104
+    # gofmt throws bullshit here, ignore it
+    - File is not `gofmt`-ed with `-s`
+    # gosec: Too many issues in popular repos
+    - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
+    # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+    - Potential file inclusion via variable
+    # nlreturn: don't space continue cuddling
+    - continue with no blank line before
+  exclude-files:
+    - ".*generated_.*types\\.go$"
+linters:
+  disable-all: true
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - contextcheck
+    - copyloopvar
+    - decorder
+    - dogsled
+    - dupl
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - exhaustruct
+    - exportloopref
+    - forbidigo
+    - forcetypeassert
+    - gochecknoinits
+    - gochecksumtype
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+    - goerr113
+    - gofumpt
+    - gosec
+    - gosimple
+    - govet
+    - grouper
+    - inamedparam
+    - ineffassign
+    - interfacebloat
+    - ireturn
+    - loggercheck
+    - makezero
+    - misspell
+    - musttag
+    - nakedret
+    - nilnil
+    - nlreturn
+    - nosprintfhostport
+    - noctx
+    - prealloc
+    - predeclared
+    - perfsprint
+    - revive
+    - staticcheck
+    - tagliatelle
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - varnamelen
+    - wastedassign
+    - whitespace
+    - wrapcheck
+    - wsl
